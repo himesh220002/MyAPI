@@ -56,7 +56,7 @@ export default function IndexPage() {
   return (
     <div style={{ padding: "40px 20px", maxWidth: "1600px", margin: "0 auto", fontFamily: "system-ui, -apple-system, sans-serif" }}>
       <h1 style={{ textAlign: "center", marginBottom: "30px", fontSize: "2.5rem", fontWeight: "800", background: "linear-gradient(to right, #4facfe 0%, #00f2fe 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-        MY_API Asset Creator
+        API Asset Creator
       </h1>
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px", background: "white", padding: "30px", borderRadius: "12px", boxShadow: "0 10px 30px rgba(0,0,0,0.05)" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
