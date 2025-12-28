@@ -12,6 +12,13 @@ function AssetItem({ asset, onUpdate }: { asset: any; onUpdate: () => void }) {
   const hasChanges = editedData !== JSON.stringify(asset.data, null, 2);
 
   const handleSave = async () => {
+    const pwd = window.prompt("Enter admin password to save changes:");
+    console.log("Checking password for Edit...", { input: pwd, expected: process.env.NEXT_PUBLIC_ADMIN_PASSWORD });
+    if (pwd?.trim() !== process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
+      alert("Invalid Password! Change denied.");
+      return;
+    }
+
     try {
       console.log("Saving changes for asset:", asset.id);
       const parsed = JSON.parse(editedData);
@@ -35,6 +42,35 @@ function AssetItem({ asset, onUpdate }: { asset: any; onUpdate: () => void }) {
       alert("Invalid JSON format. Please correct it before saving.");
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    const pwd = window.prompt("Enter admin password to DELETE this asset:");
+    console.log("Checking password for Delete...", { input: pwd, expected: process.env.NEXT_PUBLIC_ADMIN_PASSWORD });
+    if (pwd?.trim() !== process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
+      alert("Invalid Password! Deletion denied.");
+      return;
+    }
+
+    if (!window.confirm(`Are you sure you want to delete '${asset.name}'?`)) {
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from("assets")
+        .delete()
+        .eq("id", asset.id);
+
+      if (error) {
+        alert("Delete Error: " + error.message);
+      } else {
+        alert("Asset deleted successfully!");
+        onUpdate();
+      }
+    } catch (err: any) {
+      alert("Error: " + err.message);
     }
   };
 
@@ -81,6 +117,22 @@ function AssetItem({ asset, onUpdate }: { asset: any; onUpdate: () => void }) {
       {isOpen && (
         <div style={{ padding: "20px", background: "#0b1625ff" }}>
           <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginBottom: "10px" }}>
+            <button
+              onClick={handleDelete}
+              style={{
+                padding: "6px 12px",
+                borderRadius: "6px",
+                border: "1px solid #ef4444",
+                background: "rgba(239, 68, 68, 0.1)",
+                color: "#ef4444",
+                cursor: "pointer",
+                fontSize: "12px"
+              }}
+              onMouseOver={(e) => e.currentTarget.style.background = "rgba(239, 68, 68, 0.2)"}
+              onMouseOut={(e) => e.currentTarget.style.background = "rgba(239, 68, 68, 0.1)"}
+            >
+              Delete
+            </button>
             <button
               onClick={() => {
                 if (isEditing) setEditedData(JSON.stringify(asset.data, null, 2));
@@ -139,7 +191,8 @@ function AssetItem({ asset, onUpdate }: { asset: any; onUpdate: () => void }) {
           ) : (
             <pre style={{
               background: "#010810",
-              color: "#60a5fa",
+              // color: "#60a5fa",
+              color: "#82b93aff",
               padding: "15px",
               borderRadius: "8px",
               overflowX: "auto",
