@@ -2,8 +2,8 @@
 
 "use client";
 
-import IndexPage from "./pages/index";
-import AssetsPage from "./pages/assets";
+import IndexPage from "@/components/IndexPage";
+import AssetsPage from "@/components/AssetsPage";
 
 export default function Home() {
   return (
