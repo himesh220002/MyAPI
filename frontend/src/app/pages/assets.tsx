@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "../../../lib/supabaseClient";
+import { supabase } from "@/lib/supabaseClient";
 
 function AssetItem({ asset, onUpdate }: { asset: any; onUpdate: () => void }) {
   const [isOpen, setIsOpen] = useState(false);
